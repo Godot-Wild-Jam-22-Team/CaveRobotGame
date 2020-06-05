@@ -38,4 +38,3 @@ func set_energy(value: float) -> void:
 	energy = value
 	emit_signal("energy_changed", energy) #will update progress bar
 
-
