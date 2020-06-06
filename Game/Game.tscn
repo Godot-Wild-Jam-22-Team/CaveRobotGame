@@ -44,3 +44,20 @@ tile_set = SubResource( 2 )
 cell_size = Vector2( 16, 16 )
 format = 1
 tile_data = PoolIntArray( 65543, 0, 0, 65544, 0, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 131075, 0, 0, 131077, 0, 0, 196611, 0, 0, 196613, 0, 0, 262147, 0, 0, 262149, 0, 0, 327683, 0, 0, 327685, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0 )
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="HUD"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="HUD/Control"]
+margin_right = 177.0
+margin_bottom = 45.0
+mouse_filter = 1
+text = "TICK TURN"
+[connection signal="button_up" from="HUD/Control/Button" to="." method="_on_turn_button_up"]

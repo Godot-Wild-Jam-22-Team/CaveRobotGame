@@ -4,33 +4,45 @@ extends Node
 #astronaut should be out of turn management, free to move but on grid
 
 #add new Robots to Robots scene to manage all added scenes
+onready var robot_node : Node = $Node2D/Robots as Node
+
 
 var astronaut_spawn_position : Vector2 = Vector2(0, 0) * Global.UNIT_SIZE # this is a placeholder for now
 var robot_spawn_position : Vector2 = Vector2(2, 2) * Global.UNIT_SIZE
 var robot_path : Array = [
-	Global.MoveDirection.UP,
-	Global.MoveDirection.UP,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.DOWN,
+	Vector2.UP,
+	Vector2.UP,
+	Vector2.RIGHT,
+	Vector2.RIGHT,
+	Vector2.DOWN
 ]
+var astronaut_path : Array = [
+	Vector2.DOWN,
+	Vector2.DOWN,
+	Vector2.RIGHT,
+	Vector2.RIGHT,
+	Vector2.DOWN
+]
+
+var selected_object : Character = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	_spawn_astronaut()
-	_spawn_robot()
+	_spawn_character(Resources.astronaut_scene, astronaut_spawn_position, self)
+	_spawn_character(Resources.robot_scene, robot_spawn_position, robot_node)
 
-func _spawn_astronaut() -> void:
-	var astronaut_instance = Resources.astronaut_scene.instance()
-	astronaut_instance.initialize(astronaut_spawn_position)
-	add_child(astronaut_instance)
+func _spawn_character(scene : PackedScene, pos : Vector2, parent : Node) -> void:
+	var instance := scene.instance() as Character
+	instance.initialize(pos)
+	instance.movement_path.path = astronaut_path if scene == Resources.astronaut_scene else robot_path # for movement testing
+	instance.movement_path.start_point = astronaut_spawn_position if scene == Resources.astronaut_scene else robot_spawn_position # for movement testing
+	instance.connect("selected", self, "character_selected")
+	parent.add_child(instance)
+
+func character_selected(object : Character) -> void:
+	if selected_object != null and selected_object != object:
+		selected_object.selected = false
+	selected_object = object
 	
-func _spawn_robot() -> void:
-	var robot_instance = Resources.robot_scene.instance()
-	robot_instance.initialize(robot_spawn_position)
-	robot_instance.movement_path = robot_path
-	add_child(robot_instance)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-#	pass
+func _on_turn_button_up():
+	Events.emit_signal("turn_tick")

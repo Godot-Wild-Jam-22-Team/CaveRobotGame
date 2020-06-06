@@ -29,3 +29,7 @@ visible = false
 cast_to = Vector2( 0, 16 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 3.0
+[connection signal="input_event" from="." to="." method="_on_Character_input_event"]
