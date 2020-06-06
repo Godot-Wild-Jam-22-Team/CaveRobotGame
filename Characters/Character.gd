@@ -2,7 +2,6 @@ extends Area2D
 
 class_name Character
 
-signal energy_changed(new_value)
 signal selected(object)
 
 export (bool) var can_move = true
@@ -14,12 +13,10 @@ onready var path_visualization : Line2D = $Line2D as Line2D
 
 #remote transform should be used to control position of a progress bar on top of character
 
-
 #robots need a method get_repaired() that should restore battery and functionality
 var selected : bool = false setget set_selected
 var selected_overlay_color : Color = Color.red
 var speed : float = 5.0
-var energy: float = 100 setget set_energy #both energy and oxygen
 
 var movement_path : MovementPath = null
 var path_index : int = 0
@@ -49,7 +46,7 @@ func path_ended() -> void:
 
 # Movement
 func turn_tick() -> void:
-	set_selected(false)
+	self.selected = false
 	if not movement_tween.is_active() and movement_path.path_size > 0:
 		move(movement_path.get_direction())
 
@@ -59,21 +56,10 @@ func move(direction: Vector2) -> void:
 	collision_ray.cast_to = direction * Global.UNIT_SIZE
 	collision_ray.force_raycast_update()
 	if not collision_ray.is_colliding() and not selected:
-		_move_tween(direction)
-	
-func _move_tween(direction : Vector2) -> void:
-	movement_tween.interpolate_property(self, "position",
+		movement_tween.interpolate_property(self, "position",
 			position, position + direction * Global.UNIT_SIZE,
 			1.0/speed, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	movement_tween.start()
-
-func set_selected(value : bool) -> void:
-	selected = value
-	placeholder_sprite.self_modulate = selected_overlay_color if selected else Color.white
-
-func set_energy(value: float) -> void:
-	energy = value
-	emit_signal("energy_changed", energy) #will update progress bar
+		movement_tween.start()
 
 func _unhandled_input(event : InputEvent) -> void:
 	if not event is InputEventMouseButton:
@@ -85,5 +71,10 @@ func _on_Character_input_event(viewport : Node, event : InputEvent, shape_idx : 
 	if not event is InputEventMouseButton:
 		return
 	if event.button_index == BUTTON_LEFT and event.pressed:
-		set_selected(true)
+		self.selected = true
+
+func set_selected(value : bool) -> void:
+	selected = value
+	placeholder_sprite.self_modulate = selected_overlay_color if selected else Color.white
+	if selected:
 		emit_signal("selected", self)
