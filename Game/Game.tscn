@@ -1,10 +1,28 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Game/Game.gd" type="Script" id=1]
-[ext_resource path="res://wall.png" type="Texture" id=3]
+[ext_resource path="res://Assets/wall.png" type="Texture" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 8 )
+[sub_resource type="ConvexPolygonShape2D" id=1]
+points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+
+[sub_resource type="TileSet" id=2]
+0/name = "wall.png 0"
+0/texture = ExtResource( 2 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 16, 16 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 1 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+0/z_index = 0
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
@@ -17,63 +35,7 @@ position = Vector2( 16, 16 )
 [node name="Robots" type="Node" parent="Node2D"]
 
 [node name="GroundMap" type="TileMap" parent="Node2D"]
+tile_set = SubResource( 2 )
 cell_size = Vector2( 16, 16 )
 format = 1
-
-[node name="Collsion test" type="Node" parent="Node2D"]
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Node2D/Collsion test"]
-position = Vector2( 112, 32 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="wall" type="Sprite" parent="Node2D/Collsion test/StaticBody2D"]
-texture = ExtResource( 3 )
-centered = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Collsion test/StaticBody2D"]
-position = Vector2( 8, 8 )
-shape = SubResource( 1 )
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="Node2D/Collsion test"]
-position = Vector2( 96, 0 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="wall" type="Sprite" parent="Node2D/Collsion test/StaticBody2D2"]
-texture = ExtResource( 3 )
-centered = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Collsion test/StaticBody2D2"]
-position = Vector2( 8, 8 )
-shape = SubResource( 1 )
-
-[node name="StaticBody2D4" type="StaticBody2D" parent="Node2D/Collsion test"]
-position = Vector2( 96, 64 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="wall" type="Sprite" parent="Node2D/Collsion test/StaticBody2D4"]
-texture = ExtResource( 3 )
-centered = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Collsion test/StaticBody2D4"]
-position = Vector2( 8, 8 )
-shape = SubResource( 1 )
-
-[node name="StaticBody2D3" type="StaticBody2D" parent="Node2D/Collsion test"]
-position = Vector2( 80, 32 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="wall" type="Sprite" parent="Node2D/Collsion test/StaticBody2D3"]
-texture = ExtResource( 3 )
-centered = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Collsion test/StaticBody2D3"]
-position = Vector2( 8, 8 )
-shape = SubResource( 1 )
+tile_data = PoolIntArray( 65543, 0, 0, 65544, 0, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 131075, 0, 0, 131077, 0, 0, 196611, 0, 0, 196613, 0, 0, 262147, 0, 0, 262149, 0, 0, 327683, 0, 0, 327685, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0 )
