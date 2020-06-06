@@ -10,6 +10,7 @@ signal selected(object)
 onready var collision_ray : RayCast2D = $RayCast2D as RayCast2D
 onready var movement_tween : Tween = $Tween as Tween
 onready var placeholder_sprite : Polygon2D = $SpritePlaceHolder as Polygon2D
+onready var path_visualization : Line2D = $Line2D as Line2D
 
 #remote transform should be used to control position of a progress bar on top of character
 
@@ -21,12 +22,12 @@ var selected : bool = false setget set_selected
 var selected_overlay_color : Color = Color.red
 var speed : float = 5.0
 var energy: float = 100 setget set_energy #both energy and oxygen
-var directions : Dictionary = {
-	Global.MoveDirection.UP : Vector2.UP,
-	Global.MoveDirection.DOWN : Vector2.DOWN,
-	Global.MoveDirection.LEFT : Vector2.LEFT,
-	Global.MoveDirection.RIGHT : Vector2.RIGHT
-}
+#var directions : Dictionary = {
+#	Global.MoveDirection.UP : Vector2.UP,
+#	Global.MoveDirection.DOWN : Vector2.DOWN,
+#	Global.MoveDirection.LEFT : Vector2.LEFT,
+#	Global.MoveDirection.RIGHT : Vector2.RIGHT
+#}
 
 var movement_path : MovementPath = null
 var path_index : int = 0
@@ -35,16 +36,23 @@ func _ready() -> void:
 	position = position.snapped(Vector2.ONE * Global.UNIT_SIZE)
 	position += Vector2.ONE * Global.UNIT_SIZE/2
 	
+	path_visualization.clear_points()
+	path_visualization.set_as_toplevel(true)
+	
 	movement_path.connect("path_ended", self, "path_ended")
 	Events.connect("turn_tick", self, "turn_tick")
 
-# abstract method, implmented in astronaut/robot
+func _process(_delta : float) -> void:
+	path_visualization.points = movement_path.visualize_path()
+
+# abstract method, implemented in astronaut/robot
 func path_ended() -> void:
 	pass
 	
 func turn_tick() -> void:
+	set_selected(false)
 	if not movement_tween.is_active() and movement_path.path_size > 0:
-		move(directions[movement_path.get_direction()])
+		move(movement_path.get_direction())
 
 func initialize(pos: Vector2)  -> void:
 	# call from level or game scene

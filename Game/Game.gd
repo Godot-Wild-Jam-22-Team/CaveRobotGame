@@ -4,37 +4,40 @@ extends Node
 #astronaut should be out of turn management, free to move but on grid
 
 #add new Robots to Robots scene to manage all added scenes
+onready var robot_node : Node = $Node2D/Robots as Node
+
 
 var astronaut_spawn_position : Vector2 = Vector2(0, 0) * Global.UNIT_SIZE # this is a placeholder for now
 var robot_spawn_position : Vector2 = Vector2(2, 2) * Global.UNIT_SIZE
 var robot_path : Array = [
-	Global.MoveDirection.UP,
-	Global.MoveDirection.UP,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.DOWN,
+	Vector2.UP,
+	Vector2.UP,
+	Vector2.RIGHT,
+	Vector2.RIGHT,
+	Vector2.DOWN
 ]
 var astronaut_path : Array = [
-	Global.MoveDirection.DOWN,
-	Global.MoveDirection.DOWN,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.RIGHT,
-	Global.MoveDirection.DOWN,
+	Vector2.DOWN,
+	Vector2.DOWN,
+	Vector2.RIGHT,
+	Vector2.RIGHT,
+	Vector2.DOWN
 ]
 
 var selected_object : Character = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	_spawn_character(Resources.astronaut_scene, astronaut_spawn_position)
-	_spawn_character(Resources.robot_scene, robot_spawn_position)
+	_spawn_character(Resources.astronaut_scene, astronaut_spawn_position, self)
+	_spawn_character(Resources.robot_scene, robot_spawn_position, robot_node)
 
-func _spawn_character(scene : PackedScene, pos : Vector2) -> void:
+func _spawn_character(scene : PackedScene, pos : Vector2, parent : Node) -> void:
 	var instance := scene.instance() as Character
 	instance.initialize(pos)
-	instance.movement_path.path = astronaut_path if scene == Resources.astronaut_scene else robot_path
+	instance.movement_path.path = astronaut_path if scene == Resources.astronaut_scene else robot_path # for movement testing
+	instance.movement_path.start_point = astronaut_spawn_position if scene == Resources.astronaut_scene else robot_spawn_position # for movement testing
 	instance.connect("selected", self, "character_selected")
-	add_child(instance)
+	parent.add_child(instance)
 
 func character_selected(object : Character) -> void:
 	if selected_object != null and selected_object != object:
