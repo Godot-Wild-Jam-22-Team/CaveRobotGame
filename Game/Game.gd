@@ -5,6 +5,7 @@ extends Node
 
 #add new Robots to Robots scene to manage all added scenes
 onready var robot_node : Node = $Node2D/Robots as Node
+onready var turn_timer : Timer = $Node2D/TurnTimer
 
 
 var astronaut_spawn_position : Vector2 = Vector2(0, 0) * Global.UNIT_SIZE # this is a placeholder for now
@@ -30,6 +31,10 @@ var selected_object : Character = null
 func _ready() -> void:
 	_spawn_character(Resources.astronaut_scene, astronaut_spawn_position, self)
 	_spawn_character(Resources.robot_scene, robot_spawn_position, robot_node)
+	start_game()
+
+func start_game() -> void:
+	turn_timer.start()
 
 func _spawn_character(scene : PackedScene, pos : Vector2, parent : Node) -> void:
 	var instance := scene.instance() as Character
@@ -45,4 +50,8 @@ func character_selected(object : Character) -> void:
 	selected_object = object
 	
 func _on_turn_button_up():
+	Events.emit_signal("turn_tick")
+
+
+func _on_TurnTimer_timeout() -> void:
 	Events.emit_signal("turn_tick")

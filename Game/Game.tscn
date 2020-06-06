@@ -15,11 +15,6 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
-0/shape_offset = Vector2( 0, 0 )
-0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 1 )
-0/shape_one_way = false
-0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
@@ -36,6 +31,7 @@ script = ExtResource( 1 )
 position = Vector2( 16, 16 )
 
 [node name="TurnTimer" type="Timer" parent="Node2D"]
+wait_time = 2.0
 
 [node name="Robots" type="Node" parent="Node2D"]
 
@@ -60,4 +56,5 @@ margin_right = 177.0
 margin_bottom = 45.0
 mouse_filter = 1
 text = "TICK TURN"
+[connection signal="timeout" from="Node2D/TurnTimer" to="." method="_on_TurnTimer_timeout"]
 [connection signal="button_up" from="HUD/Control/Button" to="." method="_on_turn_button_up"]
