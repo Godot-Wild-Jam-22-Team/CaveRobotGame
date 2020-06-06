@@ -26,3 +26,4 @@ position = Vector2( -8, -8 )
 cast_to = Vector2( 0, 16 )
 
 [node name="Tween" type="Tween" parent="."]
+[connection signal="input_event" from="." to="." method="_on_Character_input_event"]
