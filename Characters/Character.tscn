@@ -28,3 +28,5 @@ cast_to = Vector2( 0, 16 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 0.25, 0.25 )
+
+[node name="Tween" type="Tween" parent="."]
