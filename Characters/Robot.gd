@@ -1,6 +1,8 @@
 extends Character
 class_name Robot
 
+export (int) var battery_points = 100
+
 var movement_path : Array = [] setget set_movement_path
 var path_index : int = 0
 var path_size : int = 0
@@ -13,7 +15,9 @@ func set_movement_path(path : Array) -> void:
 	path_size = movement_path.size()
 
 func _process(_delta : float) -> void:
-	if not movement_tween.is_active() and path_size > 0:
+	check_battery()
+	if not movement_tween.is_active() and path_size > 0 and can_move == true:
+		battery_points -= 4
 		move(_get_path_direction())
 
 func _get_path_direction() -> Vector2:
@@ -38,3 +42,15 @@ func _reverse_path() -> Array:
 			Global.MoveDirection.LEFT:
 				new_path.append(Global.MoveDirection.RIGHT)
 	return new_path
+
+func check_battery():
+	if battery_points <= 0:
+		battery_points = 0
+		can_move = false
+
+func lightspot_recharge():
+	can_move = false
+	while battery_points < 100:
+		print("Recharging battery: " + battery_points)
+		battery_points += 2
+	can_move = true
