@@ -18,10 +18,16 @@ _global_script_classes=[ {
 "class": "Character",
 "language": "GDScript",
 "path": "res://Characters/Character.gd"
+}, {
+"base": "Character",
+"class": "Robot",
+"language": "GDScript",
+"path": "res://Characters/Robot.gd"
 } ]
 _global_script_class_icons={
 "Astronaut": "",
-"Character": ""
+"Character": "",
+"Robot": ""
 }
 
 [application]

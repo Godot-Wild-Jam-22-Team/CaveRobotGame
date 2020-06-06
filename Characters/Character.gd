@@ -8,6 +8,7 @@ signal energy_changed(new_value)
 
 onready var collision_ray : RayCast2D = $RayCast2D as RayCast2D
 onready var movement_tween : Tween = $Tween as Tween
+onready var placeholder_sprite : Polygon2D = $SpritePlaceHolder as Polygon2D
 
 #remote transform should be used to control position of a progress bar on top of character
 
@@ -17,6 +18,12 @@ onready var movement_tween : Tween = $Tween as Tween
 #robots need a method get_repaired() that should restore battery and functionality
 var speed : float = 5.0
 var energy: float = 100 setget set_energy #both energy and oxygen
+var directions : Dictionary = {
+	Global.MoveDirection.UP : Vector2.UP,
+	Global.MoveDirection.DOWN : Vector2.DOWN,
+	Global.MoveDirection.LEFT : Vector2.LEFT,
+	Global.MoveDirection.RIGHT : Vector2.RIGHT
+}
 
 func _ready() -> void:
 	position = position.snapped(Vector2.ONE * Global.UNIT_SIZE)
