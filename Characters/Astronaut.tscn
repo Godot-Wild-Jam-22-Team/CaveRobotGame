@@ -9,4 +9,6 @@ script = ExtResource( 2 )
 [node name="RayCast2D" parent="." index="3"]
 enabled = true
 
-[node name="Tween" type="Tween" parent="." index="5"]
+[node name="Camera2D" type="Camera2D" parent="." index="5"]
+current = true
+zoom = Vector2( 0.25, 0.25 )
