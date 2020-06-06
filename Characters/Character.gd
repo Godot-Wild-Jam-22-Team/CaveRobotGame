@@ -1,8 +1,6 @@
 extends Area2D
 
 class_name Character
-#base for robot and astronaut, create instanced scenes to develop both of them
-#manage here grid movement and progress bar updates
 
 signal energy_changed(new_value)
 signal selected(object)
@@ -16,20 +14,12 @@ onready var path_visualization : Line2D = $Line2D as Line2D
 
 #remote transform should be used to control position of a progress bar on top of character
 
-#add max speed for movement
-#robots should have an array of positions to follow on every turn
 
 #robots need a method get_repaired() that should restore battery and functionality
 var selected : bool = false setget set_selected
 var selected_overlay_color : Color = Color.red
 var speed : float = 5.0
 var energy: float = 100 setget set_energy #both energy and oxygen
-#var directions : Dictionary = {
-#	Global.MoveDirection.UP : Vector2.UP,
-#	Global.MoveDirection.DOWN : Vector2.DOWN,
-#	Global.MoveDirection.LEFT : Vector2.LEFT,
-#	Global.MoveDirection.RIGHT : Vector2.RIGHT
-#}
 
 var movement_path : MovementPath = null
 var path_index : int = 0
@@ -57,19 +47,10 @@ func turn_tick() -> void:
 		move(movement_path.get_direction())
 
 func initialize(pos: Vector2)  -> void:
-	# call from level or game scene
-	# place in middle of grid cell
-	# set all inital values
-	#cell size is passed as argument 
 	position = pos
 	movement_path = MovementPath.new()
 
 func move(direction: Vector2) -> void:
-	# call from _process method or upon turn change 
-	# input should be a normalized vector (so values between -1 and +1)
-	# calculate new position using grid size information 
-	
-	# raycasts should be used to check if a near cell is empty or if it is not possible to move so do not calculate new position
 	collision_ray.cast_to = direction * Global.UNIT_SIZE
 	collision_ray.force_raycast_update()
 	if not collision_ray.is_colliding() and not selected:
