@@ -7,6 +7,8 @@ class_name Character
 signal energy_changed(new_value)
 signal selected(object)
 
+export (bool) var can_move = true
+
 onready var collision_ray : RayCast2D = $RayCast2D as RayCast2D
 onready var movement_tween : Tween = $Tween as Tween
 onready var placeholder_sprite : Polygon2D = $SpritePlaceHolder as Polygon2D
