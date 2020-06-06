@@ -24,6 +24,8 @@ var energy: float = 100 setget set_energy #both energy and oxygen
 var movement_path : MovementPath = null
 var path_index : int = 0
 
+# Initialization
+
 func _ready() -> void:
 	position = position.snapped(Vector2.ONE * Global.UNIT_SIZE)
 	position += Vector2.ONE * Global.UNIT_SIZE/2
@@ -34,23 +36,26 @@ func _ready() -> void:
 	movement_path.connect("path_ended", self, "path_ended")
 	Events.connect("turn_tick", self, "turn_tick")
 
+func initialize(pos: Vector2)  -> void:
+	position = pos
+	movement_path = MovementPath.new()
+
 func _process(_delta : float) -> void:
 	path_visualization.points = movement_path.visualize_path()
 
 # abstract method, implemented in astronaut/robot
 func path_ended() -> void:
 	pass
-	
+
+# Movement
 func turn_tick() -> void:
 	set_selected(false)
 	if not movement_tween.is_active() and movement_path.path_size > 0:
 		move(movement_path.get_direction())
 
-func initialize(pos: Vector2)  -> void:
-	position = pos
-	movement_path = MovementPath.new()
-
 func move(direction: Vector2) -> void:
+	if not can_move:
+		return
 	collision_ray.cast_to = direction * Global.UNIT_SIZE
 	collision_ray.force_raycast_update()
 	if not collision_ray.is_colliding() and not selected:
