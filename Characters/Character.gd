@@ -46,13 +46,13 @@ func path_ended() -> void:
 
 # Movement
 func turn_tick() -> void:
-	self.selected = false
+	#self.selected = false
+	if not can_move:
+		return
 	if not movement_tween.is_active() and movement_path.path_size > 0:
 		move(movement_path.get_direction())
 
 func move(direction: Vector2) -> void:
-	if not can_move:
-		return
 	collision_ray.cast_to = direction * Global.UNIT_SIZE
 	collision_ray.force_raycast_update()
 	if not collision_ray.is_colliding() and not selected:
